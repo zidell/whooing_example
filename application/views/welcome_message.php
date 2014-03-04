@@ -26,6 +26,33 @@
             padding-top: 50px;
             padding-bottom: 20px;
         }
+        h2 {
+            margin-top: 50px;
+        }
+
+
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            padding-top: 30px; height: 0; overflow: hidden;
+        }
+         
+        .video-container iframe,
+        .video-container object,
+        .video-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* See more at: http://avexdesigns.com/responsive-youtube-embed/#sthash.a8519Pmj.dpuf */
+
+        #download-row {
+            margin-top: 40px;
+        }
+
     </style>
   </head>
 
@@ -136,6 +163,36 @@
                         }).triggerHandler('click');
                     });
                 </script>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Tutorial Video</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="video-container">
+                    <iframe src="//www.youtube.com/embed/kwDfjumGrbs?rel=0" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="video-container">
+                    <iframe src="//www.youtube.com/embed/9PB7g5NkW9k?rel=0" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Download Sources</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <a class="btn btn-lg btn-warning" href="https://github.com/zidell/whooing_example" target="_blank">Download sources from Github</a>
             </div>
         </div>
 
