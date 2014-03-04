@@ -53,7 +53,8 @@ $(function () {
         },
         series: [{
             name: 'Liabilities',
-            data: [<?php echo implode(',', array_values($rows['accounts'])) ?>]
+            data: [<?php echo implode(',', array_values($rows['accounts'])) ?>],
+            color : '#5393fb'
         }]
     });
 });     

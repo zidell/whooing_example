@@ -7,9 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Jumbotron Template for Bootstrap</title>
+    <title>whooing example</title>
 
     <!-- Custom styles for this template -->
     <link href="/css/whooing.css" rel="stylesheet">
@@ -64,6 +63,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h1>Rest of API : <?php echo $this->rest_of_api ?></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <h2>Balance Sheet Example</h2>
             </div>
         </div>
@@ -93,6 +97,45 @@
                 <?php echo $this->load->view('pl_income_chart_view', array('rows'=> $pl['income'], 'accounts'=>$accounts), FALSE); ?>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Latest Entries Example</h2>
+                <table id='latest-entries' class='table table-bordered'>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Item(Detail)</th>
+                            <th>Money</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <a id="btn-more" href="javascript:;" class="btn btn-block btn-default btn-lg">More</a>
+                <script>
+                    $(function(){
+                        $('#btn-more').on('click', function(){
+                            $(this).fadeOut();
+                            $.get('<?php echo site_url('welcome/get_latest') ?>', {
+                                'max' : $('#latest-entries > tbody > tr:last').data('entry_id')
+                            }).done(function(responseHTML){
+                                if(responseHTML==''){
+                                    alert('더 이상 내용이 없습니다.');
+                                    return;
+                                }
+                                $('#latest-entries > tbody').append(responseHTML);
+                                $('#btn-more').show();
+                            });
+                        }).triggerHandler('click');
+                    });
+                </script>
+            </div>
+        </div>
+
     </div>
 
 

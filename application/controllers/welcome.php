@@ -17,6 +17,8 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+	
+	var $rest_of_api = 0;
 
 	function _api_get($url, $params=array()){
 		$this->curl->ssl(false);
@@ -24,6 +26,7 @@ class Welcome extends CI_Controller {
 		$result = $this->curl->simple_get($url, $params);
 		$result_array = unserialize($result);
 
+		$this->rest_of_api = $result_array['rest_of_api'];
 		// 응답코드에 따라 대처를 다르게 하기
 		switch($result_array['code']){
 			case 200: // 성공
@@ -75,6 +78,27 @@ class Welcome extends CI_Controller {
 		}
 		$this->load->view('welcome_message', $data);
 
+	}
+	function get_latest(){
+		// 가장 기본적으로 section에 관한 정보를 요청
+		$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
+		$section_id = $result_array['results']['section_id'];
+
+		$data = array();
+		// 항목명을 표시하기 위해서 항목 정보를 미리 요청
+		// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
+		$result_array = $this->_api_get('https://whooing.com/api/accounts.serialized', array(
+			'section_id' => $section_id
+		));
+		$data['accounts'] = $result_array['results'];
+
+		// 비용수익에 관한 api
+		$result_array = $this->_api_get('https://whooing.com/api/entries/latest.serialized', array(
+			'section_id' => $section_id,
+			'max' => $this->input->get('max')
+		));
+		$data['entries'] = $result_array['results'];
+		$this->load->view('latest_view', $data);
 	}
 
 

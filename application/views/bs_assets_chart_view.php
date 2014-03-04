@@ -53,7 +53,8 @@ $(function () {
         },
         series: [{
             name: 'Assets',
-            data: [<?php echo implode(',', array_values($rows['accounts'])) ?>]
+            data: [<?php echo implode(',', array_values($rows['accounts'])) ?>],
+            color : '#c36fbc'
         }]
     });
 });     
