@@ -52,6 +52,7 @@ class Welcome extends CI_Controller {
 
 		if($this->session->userdata('user_id')){
 			// 가장 기본적으로 section에 관한 정보를 요청
+			// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
 			$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
 			$data['section_id'] = $result_array['results']['section_id'];
 
@@ -81,6 +82,7 @@ class Welcome extends CI_Controller {
 	}
 	function get_latest(){
 		// 가장 기본적으로 section에 관한 정보를 요청
+		// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
 		$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
 		$section_id = $result_array['results']['section_id'];
 

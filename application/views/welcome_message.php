@@ -115,7 +115,7 @@
                         
                     </tbody>
                 </table>
-                <a id="btn-more" href="javascript:;" class="btn btn-block btn-default btn-lg">More</a>
+                <a id="btn-more" href="javascript:;" class="btn btn-block btn-info btn-lg">More</a>
                 <script>
                     $(function(){
                         $('#btn-more').on('click', function(){
