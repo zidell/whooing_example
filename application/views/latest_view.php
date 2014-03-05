@@ -10,10 +10,10 @@
             <?php echo number_format($row['money']); ?>
         </td>
         <td>
-            <span class="label label-default"><?php echo $accounts[$row['l_account']][$row['l_account_id']]['title']; ?></span>
+            <span class="label label-default"><?php echo $row['l_account']=='deleted' ? 'Deleted' : $accounts[$row['l_account']][$row['l_account_id']]['title']; ?></span>
         </td>
         <td>
-            <span class="label label-default"><?php echo $accounts[$row['r_account']][$row['r_account_id']]['title']; ?></span>
+            <span class="label label-default"><?php echo $row['r_account']=='deleted' ? 'Deleted' : $accounts[$row['r_account']][$row['r_account_id']]['title']; ?></span>
         </td>
     </tr>
 <?php endforeach ?>

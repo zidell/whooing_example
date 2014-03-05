@@ -19,6 +19,11 @@ class Welcome extends CI_Controller {
 	 */
 	
 	var $rest_of_api = 0;
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->driver('cache');
+	}
 
 	function _api_get($url, $params=array()){
 		$this->curl->ssl(false);
@@ -51,17 +56,25 @@ class Welcome extends CI_Controller {
 		$data = array();
 
 		if($this->session->userdata('user_id')){
+
 			// 가장 기본적으로 section에 관한 정보를 요청
-			// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
-			$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
-			$data['section_id'] = $result_array['results']['section_id'];
+			
+			$data['section_id'] = $this->cache->file->get($this->session->userdata('user_id').'_section_id');
+			if(!$data['section_id']){
+				$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
+				$data['section_id'] = $result_array['results']['section_id'];
+				$this->cache->file->save($this->session->userdata('user_id').'_section_id', $data['section_id'], 300);
+			}
 
 			// 항목명을 표시하기 위해서 항목 정보를 미리 요청
-			// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
-			$result_array = $this->_api_get('https://whooing.com/api/accounts.serialized', array(
-				'section_id' => $data['section_id']
-			));
-			$data['accounts'] = $result_array['results'];
+			$data['accounts'] = $this->cache->file->get($this->session->userdata('user_id').'_accounts');
+			if(!$data['accounts']){
+				$result_array = $this->_api_get('https://whooing.com/api/accounts.serialized', array(
+					'section_id' => $data['section_id']
+				));
+				$data['accounts'] = $result_array['results'];
+				$this->cache->file->save($this->session->userdata('user_id').'_accounts', $data['accounts'], 300);
+			}
 
 			// 자산부채에 관한 api
 			$result_array = $this->_api_get('https://whooing.com/api/bs.serialized', array(
@@ -80,23 +93,29 @@ class Welcome extends CI_Controller {
 		$this->load->view('welcome_message', $data);
 
 	}
-	function get_latest(){
-		// 가장 기본적으로 section에 관한 정보를 요청
-		// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
-		$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
-		$section_id = $result_array['results']['section_id'];
 
-		$data = array();
+	function get_latest(){
+
+		$data['section_id'] = $this->cache->file->get($this->session->userdata('user_id').'_section_id');
+		if(!$data['section_id']){
+			$result_array = $this->_api_get('https://whooing.com/api/sections/default.serialized');
+			$data['section_id'] = $result_array['results']['section_id'];
+			$this->cache->file->save($this->session->userdata('user_id').'_section_id', $data['section_id'], 300);
+		}
+
 		// 항목명을 표시하기 위해서 항목 정보를 미리 요청
-		// 실제 서비스에서는 이 리소스가 항상 필요하므로 자체 DB에 캐싱을 하는 것을 추천(매번 요청하면 후잉서버에 무리가 감)
-		$result_array = $this->_api_get('https://whooing.com/api/accounts.serialized', array(
-			'section_id' => $section_id
-		));
-		$data['accounts'] = $result_array['results'];
+		$data['accounts'] = $this->cache->file->get($this->session->userdata('user_id').'_accounts');
+		if(!$data['accounts']){
+			$result_array = $this->_api_get('https://whooing.com/api/accounts.serialized', array(
+				'section_id' => $data['section_id']
+			));
+			$data['accounts'] = $result_array['results'];
+			$this->cache->file->save($this->session->userdata('user_id').'_accounts', $data['accounts'], 300);
+		}
 
 		// 비용수익에 관한 api
 		$result_array = $this->_api_get('https://whooing.com/api/entries/latest.serialized', array(
-			'section_id' => $section_id,
+			'section_id' => $data['section_id'],
 			'max' => $this->input->get('max')
 		));
 		$data['entries'] = $result_array['results'];
