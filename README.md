@@ -4,7 +4,7 @@ whooing_example
 A financial website with Codeigniter using whooing API
 
 ## Demo
-[http://whooing_example.gitools.net](http://whooing_example.gitools.net)
+** 사라짐. 데헷 **
 
 ## API Documentation
 [https://whooing.com/dev](https://whooing.com/dev)
